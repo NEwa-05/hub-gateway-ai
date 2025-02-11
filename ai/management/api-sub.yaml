@@ -8,8 +8,8 @@ spec:
   apiPlan:
     name: std-ai
   apis:
-  - name: mistral-managed
-  - name: azure-managed
+  # - name: mistral-managed
+  # - name: azure-managed
   - name: ai-managed
   applications:
   - appId: ai-demo
@@ -37,7 +37,7 @@ spec:
   apiPlan:
     name: std-ai
   apis:
-  - name: mistral-managed
-  - name: azure-managed
+  # - name: mistral-managed
+  # - name: azure-managed
   - name: ai-managed
   everyone: true

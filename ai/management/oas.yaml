@@ -72,46 +72,46 @@ metadata:
   name: ai-oas
   namespace: traefik
 data:
-  mistral-oas.yaml: |
-    openapi: "3.0.0"
-    info:
-      version: 1.0.0
-      title: Mistral AI OAS
-      description: Mistral AI OAS
-      license:
-        name: Apache 2.0
-        url: https://spdx.org/licenses/Apache-2.0.html
-    servers:
-      - url: https://ai.dbl25aiw07.demo.traefiklabs.tech/
-    paths:
-      /:
-        get:
-          summary: Ask questions
-          responses:
-            '200':
-              description: answer your questions
-            default:
-              description: unexpected error
-  azure-oas.yaml: |
-    openapi: "3.0.0"
-    info:
-      version: 1.0.0
-      title: Azure AI OAS
-      description: Azure AI OAS
-      license:
-        name: Apache 2.0
-        url: https://spdx.org/licenses/Apache-2.0.html
-    servers:
-      - url: https://ai.dbl25aiw07.demo.traefiklabs.tech/
-    paths:
-      /:
-        get:
-          summary: Ask questions
-          responses:
-            '200':
-              description: answer your questions
-            default:
-              description: unexpected error
+  # mistral-oas.yaml: |
+  #   openapi: "3.0.0"
+  #   info:
+  #     version: 1.0.0
+  #     title: Mistral AI OAS
+  #     description: Mistral AI OAS
+  #     license:
+  #       name: Apache 2.0
+  #       url: https://spdx.org/licenses/Apache-2.0.html
+  #   servers:
+  #     - url: https://ai.dbl25aiw07.demo.traefiklabs.tech/
+  #   paths:
+  #     /:
+  #       get:
+  #         summary: Ask questions
+  #         responses:
+  #           '200':
+  #             description: answer your questions
+  #           default:
+  #             description: unexpected error
+  # azure-oas.yaml: |
+  #   openapi: "3.0.0"
+  #   info:
+  #     version: 1.0.0
+  #     title: Azure AI OAS
+  #     description: Azure AI OAS
+  #     license:
+  #       name: Apache 2.0
+  #       url: https://spdx.org/licenses/Apache-2.0.html
+  #   servers:
+  #     - url: https://ai.dbl25aiw07.demo.traefiklabs.tech/
+  #   paths:
+  #     /:
+  #       get:
+  #         summary: Ask questions
+  #         responses:
+  #           '200':
+  #             description: answer your questions
+  #           default:
+  #             description: unexpected error
   global-oas.yaml: |
     openapi: "3.0.0"
     info:
