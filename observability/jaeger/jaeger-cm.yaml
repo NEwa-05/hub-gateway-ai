@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app: jaeger
+    app.kubernetes.io/component: sampling-configuration
+    app.kubernetes.io/instance: simplest
+    app.kubernetes.io/name: simplest-sampling-configuration
+    app.kubernetes.io/part-of: jaeger
+  name: simplest-sampling-configuration
+  namespace: observability
+data:
+  sampling: '{"default_strategy":{"param":1.0,"type":"ratelimiting"}}'

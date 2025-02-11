@@ -1,0 +1,19 @@
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: apiportal
+  namespace: traefik
+  annotations:
+    hub.traefik.io/api-portal: ai-portal
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`ai-portal.${CLUSTERNAME}.${FULLDOMAINNAME}`)
+    kind: Rule
+    services:
+    - name: apiportal
+      port: 9903
+  tls:
+    certResolver: le

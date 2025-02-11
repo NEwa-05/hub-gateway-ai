@@ -1,0 +1,45 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: ai-ingress
+  namespace: traefik
+  annotations:
+    hub.traefik.io/api: ai-managed
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`ai.${CLUSTERNAME}.${FULLDOMAINNAME}`)
+      services:
+        - kind: TraefikService
+          name: traefik-mistral-ai-svc@ai-gateway-service
+          # name: traefik-azure-ai-svc@ai-gateway-service
+          # name: wrr-ai-ts
+      middlewares:
+        - name: cors
+  tls:
+    certResolver: le
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: cors
+  namespace: traefik
+spec:
+  headers:
+    accessControlAllowCredentials: true
+    accessControlAllowMethods:
+      - GET
+      - HEAD
+      - POST
+      - PUT
+      - PATCH
+      - DELETE
+      - CONNECT
+      - OPTIONS
+    accessControlAllowOriginList:
+      - "*"
+    accessControlMaxAge: 0
+    accessControlAllowHeaders:
+      - "*"

@@ -1,0 +1,43 @@
+---
+apiVersion: hub.traefik.io/v1alpha1
+kind: ManagedSubscription
+metadata:
+  name: ai-sub
+  namespace: traefik
+spec:
+  apiPlan:
+    name: std-ai
+  apis:
+  - name: mistral-managed
+  - name: azure-managed
+  - name: ai-managed
+  applications:
+  - appId: ai-demo
+---
+apiVersion: hub.traefik.io/v1alpha1
+kind: APIPlan
+metadata:
+  name: std-ai
+  namespace: traefik
+spec:
+  quota:
+    limit: 20
+    period: 1h
+  rateLimit:
+    limit: 5
+    period: 10s
+  title: Standard AI plan
+---
+apiVersion: hub.traefik.io/v1alpha1
+kind: APICatalogItem
+metadata:
+  name: ai-catalog
+  namespace: traefik
+spec:
+  apiPlan:
+    name: std-ai
+  apis:
+  - name: mistral-managed
+  - name: azure-managed
+  - name: ai-managed
+  everyone: true

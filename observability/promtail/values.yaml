@@ -1,0 +1,8 @@
+# https://github.com/grafana/helm-charts/blob/main/charts/promtail/values.yaml
+resources:
+  requests:
+    cpu: 20m
+    memory: 64Mi
+  limits:
+    cpu: 20m
+    memory: 64Mi

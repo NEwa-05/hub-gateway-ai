@@ -1,0 +1,13 @@
+---
+apiVersion: hub.traefik.io/v1alpha1
+kind: APIPortal
+metadata:
+  name: ai-portal
+  namespace: traefik
+spec:
+  title: AI Portal
+  description: "AI Developer Portal"
+  trustedUrls:
+    - https://ai-portal.${CLUSTERNAME}.${FULLDOMAINNAME}/
+  ui:
+    logoUrl: https://traefik.io/favicon.png

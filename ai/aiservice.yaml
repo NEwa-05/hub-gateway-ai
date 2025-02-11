@@ -1,0 +1,37 @@
+---
+apiVersion: hub.traefik.io/v1alpha1
+kind: AIService
+metadata:
+  name: mistral-ai-svc
+  namespace: traefik
+spec:
+  mistral:
+    apiKey: ${MISTRALAPIKEY}
+    model: "open-mistral-nemo"
+---
+apiVersion: hub.traefik.io/v1alpha1
+kind: AIService
+metadata:
+  name: azure-ai-svc
+  namespace: traefik
+spec:
+  azureOpenai:
+    apiKey: ${AZUREAIKEY}
+    baseUrl: "https://saver-m6zb3zwz-swedencentral.openai.azure.com/"
+    deploymentName: "gpt-4o-mini"
+    model: "gpt-4o-mini"
+---
+apiVersion: traefik.io/v1alpha1
+kind: TraefikService
+metadata:
+  name: wrr-ai-ts
+  namespace: traefik
+spec:
+  weighted:
+    services:
+      - name: traefik-mistral-ai-svc@ai-gateway-service
+        kind: TraefikService
+        weight: 1
+      - name: traefik-azure-ai-svc@ai-gateway-service
+        kind: TraefikService
+        weight: 1

@@ -1,0 +1,134 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oas-share-deploy
+  namespace: traefik
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: oas-share
+  template:
+    metadata:
+      labels:
+        app: oas-share
+    spec:
+      containers:
+        - name: fileserve
+          resources:
+            requests:
+              memory: "32Mi"
+              cpu: "50m"
+            limits:
+              memory: "32Mi"
+              cpu: "50m"
+          image: newa/fileserv:1.0
+          env:
+            - name: APP_PORT
+              value: ":80"
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+          - name: openapi
+            mountPath: /tmp
+      volumes:
+        - name: openapi
+          configMap:
+            name: ai-oas
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: oas-share-svc
+  namespace: traefik
+  labels:
+    app: oas-share
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      name: http
+  selector:
+    app: oas-share
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: oas-share-ing
+  namespace: traefik
+spec:
+  entryPoints:
+    - web
+  routes:
+    - kind: Rule
+      match: Host(`oas-share.${CLUSTERNAME}.${FULLDOMAINNAME}`)
+      services:
+        - name: oas-share-svc
+          port: 80
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ai-oas
+  namespace: traefik
+data:
+  mistral-oas.yaml: |
+    openapi: "3.0.0"
+    info:
+      version: 1.0.0
+      title: Mistral AI OAS
+      description: Mistral AI OAS
+      license:
+        name: Apache 2.0
+        url: https://spdx.org/licenses/Apache-2.0.html
+    servers:
+      - url: https://ai.dbl25aiw07.demo.traefiklabs.tech/
+    paths:
+      /:
+        get:
+          summary: Ask questions
+          responses:
+            '200':
+              description: answer your questions
+            default:
+              description: unexpected error
+  azure-oas.yaml: |
+    openapi: "3.0.0"
+    info:
+      version: 1.0.0
+      title: Azure AI OAS
+      description: Azure AI OAS
+      license:
+        name: Apache 2.0
+        url: https://spdx.org/licenses/Apache-2.0.html
+    servers:
+      - url: https://ai.dbl25aiw07.demo.traefiklabs.tech/
+    paths:
+      /:
+        get:
+          summary: Ask questions
+          responses:
+            '200':
+              description: answer your questions
+            default:
+              description: unexpected error
+  global-oas.yaml: |
+    openapi: "3.0.0"
+    info:
+      version: 1.0.0
+      title: Gateway AI OAS
+      description: Gateway AI OAS
+      license:
+        name: Apache 2.0
+        url: https://spdx.org/licenses/Apache-2.0.html
+    servers:
+      - url: https://ai.dbl25aiw07.demo.traefiklabs.tech/
+    paths:
+      /:
+        get:
+          summary: Ask questions
+          responses:
+            '200':
+              description: answer your questions
+            default:
+              description: unexpected error

@@ -1,0 +1,39 @@
+---
+apiVersion: hub.traefik.io/v1alpha1
+kind: API
+metadata:
+  name: mistral-managed
+  namespace: traefik
+  labels:
+    area: ai
+    provider: mistral
+spec:
+  openApiSpec:
+    url: http://oas-share.dbl25aiw07.demo.traefiklabs.tech/mistral-oas.yaml
+    validateRequestMethodAndPath: false
+---
+apiVersion: hub.traefik.io/v1alpha1
+kind: API
+metadata:
+  name: azure-managed
+  namespace: traefik
+  labels:
+    area: ai
+    provider: azure
+spec:
+  openApiSpec:
+    url: http://oas-share.dbl25aiw07.demo.traefiklabs.tech/azure-oas.yaml
+    validateRequestMethodAndPath: false
+---
+apiVersion: hub.traefik.io/v1alpha1
+kind: API
+metadata:
+  name: ai-managed
+  namespace: traefik
+  labels:
+    area: ai
+    provider: gateway
+spec:
+  openApiSpec:
+    url: http://oas-share.dbl25aiw07.demo.traefiklabs.tech/global-oas.yaml
+    validateRequestMethodAndPath: false

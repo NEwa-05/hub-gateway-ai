@@ -1,0 +1,21 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: ai-ingress
+  namespace: traefik
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`ai.${CLUSTERNAME}.${FULLDOMAINNAME}`)
+      services:
+        - kind: TraefikService
+          # name: traefik-mistral-ai-svc@ai-gateway-service
+          # name: traefik-azure-ai-svc@ai-gateway-service
+          name: wrr-ai-ts
+      middlewares:
+        - name: jwt
+        - name: drl
+  tls:
+    certResolver: le

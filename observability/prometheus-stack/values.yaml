@@ -1,0 +1,122 @@
+# https://github.com/prometheus-community/helm-charts/blob/main/charts/kube-prometheus-stack/values.yaml
+grafana:
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 100m
+    limits:
+      memory: 256Mi
+      cpu: 100m
+  defaultDashboardsEnabled: false
+  additionalDataSources:
+    - name: Loki
+      access: proxy
+      isDefault: false
+      editable: true
+      orgId: 1
+      type: loki
+      url: http://loki:3100
+      version: 1
+    - name: jaeger
+      access: proxy
+      isDefault: false
+      editable: true
+      orgId: 1
+      type: jaeger
+      url: http://simplest-query:16686
+      version: 1
+  dashboardProviders:
+    dashboardproviders.yaml:
+      apiVersion: 1
+      providers:
+      - name: traefikdash
+        folder: Traefik API Gateway
+        type: file
+        orgId: 1
+        updateIntervalSeconds: 10
+        options:
+          path: /var/lib/grafana/dashboards/traefikdash
+          foldersFromFilesStructure: false
+  dashboardsConfigMaps:
+    traefikdash: "grafana-traefik-dashboards"
+  adminPassword: traefikhub
+prometheus:
+  global:
+    scrape_interval: 10s
+    scrape_timeout: 10s
+    evaluation_interval: 10s
+  prometheusSpec:
+    resources:
+      requests:
+        memory: 512Mi
+        cpu: 400m
+      limits:
+        memory: 512Mi
+        cpu: 400m
+    retention: 1d
+    additionalArgs:
+      - name: web.enable-otlp-receiver
+        value: ""
+    additionalScrapeConfigs:
+      - job_name: 'traefik'
+        kubernetes_sd_configs:
+          - role: pod
+            namespaces:
+              names:
+                - traefik
+        relabel_configs:
+        - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+          action: keep
+          regex: true
+        - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+          action: replace
+          regex: ([^:]+)(?::\d+)?;(\d+)
+          replacement: $1:$2
+          target_label: __address__
+        - source_labels: [__meta_kubernetes_pod_label_version]
+          action: replace
+          replacement: $1
+          target_label: version
+      - job_name: 'flux-system'
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+            action: keep
+            regex: true
+          - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+            action: replace
+            regex: ([^:]+)(?::\d+)?;(\d+)
+            replacement: $1:$2
+            target_label: __address__
+          - source_labels: [__meta_kubernetes_pod_label_app]
+            action: replace
+            replacement: $1
+            target_label: app
+          - target_label: namespace
+            source_labels: [__meta_kubernetes_namespace]
+          - target_label: pod
+            source_labels: [__meta_kubernetes_pod_name]
+        kubernetes_sd_configs:
+          - role: pod
+            namespaces:
+              names:
+                - flux-system
+prometheus-node-exporter:
+  resources:
+    requests:
+      memory: 128Mi
+      cpu: 100m
+    limits:
+      memory: 128Mi
+      cpu: 100m
+alertmanager:
+  enabled: false
+kube-state-metrics:
+  enabled: false
+prometheusOperator:
+  resources:
+    requests:
+      memory: 128Mi
+      cpu: 100m
+    limits:
+      memory: 128Mi
+      cpu: 100m      
