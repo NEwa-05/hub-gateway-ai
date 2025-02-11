@@ -68,7 +68,7 @@ envsubst < hub/ingress.yaml | kubectl apply -f -
 helm upgrade --install loki grafana/loki --create-namespace --namespace observability --values observability/loki/values.yaml
 kubectl apply -f observability/jaeger
 helm upgrade --install promtail grafana/promtail --create-namespace --namespace observability --values observability/promtail/values.yaml
-kubectl create configmap grafana-traefik-dashboards --from-file=observability/prometheus-stack/traefik.json -o yaml --dry-run=client -n observability | kubectl apply -f -
+kubectl create configmap grafana-traefik-dashboards --from-file=observability/prometheus-stack/traefik.json --from-file=observability/prometheus-stack/api.json --from-file=observability/prometheus-stack/ai.json -o yaml --dry-run=client -n observability | kubectl apply -f -
 helm upgrade -i prometheus-stack prometheus-community/kube-prometheus-stack -f observability/prometheus-stack/values.yaml --namespace=observability
 envsubst < observability/prometheus-stack/ingress.yaml | kubectl apply -f -
 ```

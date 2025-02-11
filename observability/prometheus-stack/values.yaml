@@ -29,16 +29,16 @@ grafana:
     dashboardproviders.yaml:
       apiVersion: 1
       providers:
-      - name: traefikdash
-        folder: Traefik API Gateway
+      - name: traefik
+        folder: Traefik
         type: file
         orgId: 1
         updateIntervalSeconds: 10
         options:
-          path: /var/lib/grafana/dashboards/traefikdash
+          path: /var/lib/grafana/dashboards/traefik
           foldersFromFilesStructure: false
   dashboardsConfigMaps:
-    traefikdash: "grafana-traefik-dashboards"
+    traefik: "grafana-traefik-dashboards"
   adminPassword: traefikhub
 prometheus:
   global:

@@ -13,9 +13,7 @@ spec:
       match: Host(`ai.${CLUSTERNAME}.${FULLDOMAINNAME}`)
       services:
         - kind: TraefikService
-          name: traefik-mistral-ai-svc@ai-gateway-service
-          # name: traefik-azure-ai-svc@ai-gateway-service
-          # name: wrr-ai-ts
+          name: wrr-ai-ts
       middlewares:
         - name: cors
   tls:
